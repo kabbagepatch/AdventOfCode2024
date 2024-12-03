@@ -1,4 +1,7 @@
-DAY=02
+DAY=$(shell date +%d)
+
+update-tasks:
+	@./update.sh
 
 create:
 	@mkdir day${DAY}
