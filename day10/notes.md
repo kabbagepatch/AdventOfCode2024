@@ -1,0 +1,5 @@
+As soon as I saw the problem, I knew recursion would be the answer. So I wrote my recursive function that takes in the map and a starting coordiate, and finds the number of peaks (9s) it visits. The base case was a peak, which just returned 1. Otherwise, I check each direction, and if it's one step up, I recurse. This had a slight problem in it that it was counting peaks multiple times if there are multiple ways to get to that peak. So I modified it such that instead of returning the number, I return a set of peaks (thus ensuring no peak gets counted twice). This worked, and I had my answer.
+
+Now, I would like to note that I accidentally solved part two before part one, because my initial recursive code was counting peaks multiple times was doing so if there were multiple paths to them. Which is exactly what part two wanted. So I just had to hold undo until I had my old code, and the answer was there :D
+
+One extra optimization I added from the start in both parts was a map for memoization, so I don't need to recalculate the scores/paths of paths I already have

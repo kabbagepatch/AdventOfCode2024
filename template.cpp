@@ -34,9 +34,9 @@ int main () {
   myfile.open ("../testinput");
   vector<string> lines;
   if (myfile.is_open()) {
-    string lineString;
-    while(getline(myfile, lineString)) {
-      lines.push_back(lineString);
+    string line_string;
+    while(getline(myfile, line_string)) {
+      lines.push_back(line_string);
     }
   }
   myfile.close();
