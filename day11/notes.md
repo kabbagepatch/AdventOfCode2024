@@ -1,0 +1,3 @@
+Like a lot of these problems, part one is solvable by brute force and there was no reason to not do it using brute force. Simple to follow rules, making a new stones array using an old one 25 times. No problem
+
+Then I had to do it 75 times. And as I expected, the problem grows exponentially, so that's not gonna happen. Even with one stone, it was stalling in the 40s. After some thought, I realised that the order of the stones doesn't really matter. And the stones don't really interact with each other. And that I would save a lot of computation if, instead of processing each stone individually, I just keep count of each type of stone, process it once, and add to the counts of the next set of stones. This sped things up immensely, and I had my answer.
