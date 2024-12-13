@@ -1,0 +1,7 @@
+What a problem. I am under no impression that my code is the most efficient way to solve the problem, that I know. But it's a way and it worked
+
+Before I even started with part one or two, the first thing that made sense to me was to relabel everything to have unique labels. I probably did this in quite a convoluted way. The relabeled plots, I kept in a 2d vector of integers, where the integer was my unique label. Then I iterated through the area to capture labels. I kept a mapping of type-to-unique labels. This was where the first "gotcha" moment happened, as I realised that because I got top-to-bottom, and left-to-right, and therefore two regions I thought were separate could end up joining later. Had to solve that using that mapping I made
+
+Then for part one, once I had the relabeled plots, I just went through those and, for area, counted the number of plots of each label, and for perimeter, the number of exposed sides of each plot. An integer label meant I could store these things in vectors to keep things simple
+
+For part two, my relabeling logic did not change. But instead of perimeter, I needed sides. I realised the number of sides is equal to the number of corners early on. And then began the journey of taking into account every corner case arrangement. Lots of if statements. I tried my best to combine multiple cases into one but it was getting way to complicated with nested if statements, so I just separated them all out. And there we had our answer
