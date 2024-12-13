@@ -1,5 +1,4 @@
 DAY=$(shell date +%d)
-DAY=12
 
 update-tasks:
 	@./update.sh ${DAY}

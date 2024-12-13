@@ -1,0 +1,1 @@
+Very simple problem if you know your linear algebra. It's just a system of two equations with two variables. And you're looking for integer solutions under a 100 for part one. And integer solutions for part two with larger data types
