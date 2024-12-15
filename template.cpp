@@ -4,6 +4,11 @@
 #include <vector>
 using namespace std;
 
+struct coords {
+  int x;
+  int y;
+};
+
 vector<string> split(string s, string delimiter) {
   vector<string> results;
   size_t pos = 0;
@@ -19,6 +24,14 @@ vector<string> split(string s, string delimiter) {
 
 bool isNumber(char c) {
   return c >= '0' && c <= '9';
+}
+
+void print(string stuff) {
+  cout << stuff << endl;
+}
+
+void print(coords stuff) {
+  cout << stuff.x << ", " << stuff.y << endl;
 }
 
 void print(vector<string> stuff) {
