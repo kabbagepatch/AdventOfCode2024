@@ -7,6 +7,9 @@ using namespace std;
 struct coords {
   int x;
   int y;
+  bool operator==(const coords& other) const {
+    return x == other.x && y == other.y;
+  }
 };
 
 vector<string> split(string s, string delimiter) {

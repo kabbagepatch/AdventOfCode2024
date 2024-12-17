@@ -59,10 +59,7 @@ int main () {
   // relabele plots with a unique label (for distinct regions of the same type)
   map<char, vector<int>> plot_mappings; // to map a type with a set of new labels
   int cur_plot = 0;
-  vector<vector<int>> relabeled_plots(plots.size());
-  for (int i = 0; i < plots.size(); i += 1) {
-    relabeled_plots[i] = vector<int>(plots[0].size());
-  }
+  vector<vector<int>> relabeled_plots(plots.size(), vector<int>(plots[0].size(), 0));
   for (int i = 0; i < plots.size(); i += 1) {
     string row = plots[i];
     for (int j = 0; j < plots[0].size(); j += 1) {

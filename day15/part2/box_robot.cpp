@@ -63,22 +63,16 @@ bool can_move_box(vector<string>& area, coords cur_position, char direction, boo
   }
 
   if (at_next_x1 == area[y][x1]) {
-    coords next_position;
-    next_position.x = x1;
-    next_position.y = next_y;
+    coords next_position = {x1, next_y};
     can_move = can_move_box(area, next_position, direction, move);
   } else {
     if (at_next_x1 != '.') {
-      coords next_position;
-      next_position.x = x1;
-      next_position.y = next_y;
+      coords next_position = {x1, next_y};
       can_move = can_move && can_move_box(area, next_position, direction, move);
     }
 
     if (at_next_x2 != '.') {
-      coords next_position;
-      next_position.x = x2;
-      next_position.y = next_y;
+      coords next_position = {x2, next_y};
       can_move = can_move && can_move_box(area, next_position, direction, move);
     }
   }
@@ -139,9 +133,7 @@ int main () {
   cout << endl;
 
   for (char c : robot_instructions) {
-    coords next;
-    next.x = robot.x;
-    next.y = robot.y;
+    coords next = {robot.x, robot.y};
     switch(c) {
       case '^': next.y = robot.y - 1; break;
       case 'v': next.y = robot.y + 1; break;
@@ -158,9 +150,7 @@ int main () {
     
     if (area[next.y][next.x] == '[' || area[next.y][next.x] == ']') {
       if (c == '<' || c == '>') {
-        coords next_non_box;
-        next_non_box.x = next.x;
-        next_non_box.y = next.y;
+        coords next_non_box = {next.x, next.y};
         while (area[next_non_box.y][next_non_box.x] == '[' || area[next_non_box.y][next_non_box.x] == ']') {
           next_non_box.x = c == '<' ? next_non_box.x - 2 : next_non_box.x + 2;
         }
