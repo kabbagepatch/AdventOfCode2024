@@ -1,0 +1,1 @@
+Suspiciously simple. Just a little BFS. ~~Yeah, I could've made it more efficient for part two by keeping track of the shortest path and only recalculating if a pixel falls within the path, but does it matter haha~~ I made it more efficient. My BFS now returns the shortest path, and I check it before recalculating
