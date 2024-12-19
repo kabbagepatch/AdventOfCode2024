@@ -78,13 +78,7 @@ int main () {
   }
   myfile.close();
 
-  string register_prefix = "Register X: ";
   string program_prefix = "Program: ";
-
-  long A = stol(lines[0].substr(register_prefix.size()));
-  long B = stol(lines[1].substr(register_prefix.size()));
-  long C = stol(lines[2].substr(register_prefix.size()));
-
   string program_string = lines[4].substr(program_prefix.size());
   vector<int> program = split(program_string, ",");
   
