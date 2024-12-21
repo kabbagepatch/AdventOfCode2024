@@ -5,10 +5,10 @@
 using namespace std;
 
 struct coords {
-  int x;
-  int y;
+  int r;
+  int c;
   bool operator==(const coords& other) const {
-    return x == other.x && y == other.y;
+    return r == other.r && c == other.c;
   }
 };
 
@@ -34,7 +34,7 @@ void print(string stuff) {
 }
 
 void print(coords stuff) {
-  cout << stuff.x << ", " << stuff.y << endl;
+  cout << stuff.c << ", " << stuff.r << endl;
 }
 
 void print(vector<string> stuff) {
