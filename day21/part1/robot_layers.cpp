@@ -94,7 +94,6 @@ string get_numpad_sequence(string numeric_code, const map<char, coords>& numpad_
         cur_position.c += 1;
       }
     }
-    // vector<string> next_sequences = get_sequences_from(cur_position, next_position);
     sequence += get_sequence_from(cur_position, next_position);
     cur_position = next_position;
   }
