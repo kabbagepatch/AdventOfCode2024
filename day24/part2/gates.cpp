@@ -146,64 +146,70 @@ int main () {
     cout << endl;
   }
 
-  // while (!incorrect_indices.empty()) {
-  //   int first_incorrect_index = incorrect_indices[0];
-  //   set<string> correct_outputs;
-  //   for (int i = 0; i < first_incorrect_index; i += 1) {
-  //     string gate = i < 10 ? "z0" + to_string(i) : "z" + to_string(i);
-  //     correct_outputs.insert(gate_inputs[gate].begin(), gate_inputs[gate].end());
-  //   }
+  /*
 
-  //   vector<string> incorrect_outputs;
-  //   string gate = "z" + to_string(first_incorrect_index);
-  //   set_difference(gate_inputs[gate].begin(), gate_inputs[gate].end(), correct_outputs.begin(), correct_outputs.end(), back_inserter(incorrect_outputs));
+  *** A bunch of inefficient code that didn't really work ***
 
-  //   bool done = false;
-  //   for (int i = 0; i < incorrect_outputs.size() - 1; i += 1) {
-  //     string i_operation = operations[incorrect_outputs[i]];
+  while (!incorrect_indices.empty()) {
+    int first_incorrect_index = incorrect_indices[0];
+    set<string> correct_outputs;
+    for (int i = 0; i < first_incorrect_index; i += 1) {
+      string gate = i < 10 ? "z0" + to_string(i) : "z" + to_string(i);
+      correct_outputs.insert(gate_inputs[gate].begin(), gate_inputs[gate].end());
+    }
+
+    vector<string> incorrect_outputs;
+    string gate = "z" + to_string(first_incorrect_index);
+    set_difference(gate_inputs[gate].begin(), gate_inputs[gate].end(), correct_outputs.begin(), correct_outputs.end(), back_inserter(incorrect_outputs));
+
+    bool done = false;
+    for (int i = 0; i < incorrect_outputs.size() - 1; i += 1) {
+      string i_operation = operations[incorrect_outputs[i]];
       
-  //     for (int j = i + 1; j < incorrect_outputs.size(); j += 1) {
-  //       if (j == 5) continue;
+      for (int j = i + 1; j < incorrect_outputs.size(); j += 1) {
+        if (j == 5) continue;
 
-  //       string j_operation = operations[incorrect_outputs[j]];
-  //       cout << "i = " << i << ": " << incorrect_outputs[i] << " = " << i_operation << endl;
-  //       cout << "j = " << j << ": " << incorrect_outputs[j] << " = " << j_operation << endl;
+        string j_operation = operations[incorrect_outputs[j]];
+        cout << "i = " << i << ": " << incorrect_outputs[i] << " = " << i_operation << endl;
+        cout << "j = " << j << ": " << incorrect_outputs[j] << " = " << j_operation << endl;
 
-  //       operations[incorrect_outputs[j]] = i_operation;
-  //       operations[incorrect_outputs[i]] = j_operation;
-  //       gate_inputs.clear();
-  //       gate_results.clear();
-  //       incorrect_indices.clear();
+        operations[incorrect_outputs[j]] = i_operation;
+        operations[incorrect_outputs[i]] = j_operation;
+        gate_inputs.clear();
+        gate_results.clear();
+        incorrect_indices.clear();
 
-  //       z_number = "";
-  //       for (int g = 0; g < z_gates; g += 1) {
-  //         string gate = g < 10 ? "z0" + to_string(g) : "z" + to_string(g);
-  //         set<string> gates_involved;
-  //         bool result = get_gate_result(gate, gates_involved, input_gates, gate_results, operations);
-  //         gate_results[gate] = result;
-  //         gate_inputs[gate] = gates_involved;
-  //         z_number = to_string(gate_results[gate]) + z_number;
-  //       }
+        z_number = "";
+        for (int g = 0; g < z_gates; g += 1) {
+          string gate = g < 10 ? "z0" + to_string(g) : "z" + to_string(g);
+          set<string> gates_involved;
+          bool result = get_gate_result(gate, gates_involved, input_gates, gate_results, operations);
+          gate_results[gate] = result;
+          gate_inputs[gate] = gates_involved;
+          z_number = to_string(gate_results[gate]) + z_number;
+        }
 
-  //       for (int g = 0; g < z_number.length(); g += 1) {
-  //         if (actual_z_number[z_number.length() - g - 1] != z_number[z_number.length() - g - 1]) {
-  //           cout << g << " ";
-  //           incorrect_indices.push_back(g);
-  //         }
-  //       }
-  //       cout << endl;
-  //       cout << endl;
+        for (int g = 0; g < z_number.length(); g += 1) {
+          if (actual_z_number[z_number.length() - g - 1] != z_number[z_number.length() - g - 1]) {
+            cout << g << " ";
+            incorrect_indices.push_back(g);
+          }
+        }
+        cout << endl;
+        cout << endl;
 
-  //       if (incorrect_indices[0] != first_incorrect_index) {
-  //         cout << incorrect_outputs[i] << ", " << incorrect_outputs[j] << endl;
-  //         done = true;
-  //         break;
-  //       }
+        if (incorrect_indices[0] != first_incorrect_index) {
+          cout << incorrect_outputs[i] << ", " << incorrect_outputs[j] << endl;
+          done = true;
+          break;
+        }
 
-  //       operations[incorrect_outputs[i]] = i_operation;
-  //       operations[incorrect_outputs[j]] = j_operation;
-  //     }
-  //     if (done) break;
-  //   }
-  // }
+        operations[incorrect_outputs[i]] = i_operation;
+        operations[incorrect_outputs[j]] = j_operation;
+      }
+      if (done) break;
+    }
+  }
+
+  */
 }

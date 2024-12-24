@@ -16,32 +16,20 @@ void print(vector<string> stuff) {
   cout << endl;
 }
 
-string get_gate_expression(string gate, map<string, bool>& input_gates, map<string, string>& gate_expressions, map<string, string>& operations) {
-  if (gate[0] == 'x' || gate[0] == 'y') {
-    return gate;
-  }
-  string gate_operation = operations[gate];
-  if (gate_operation[0] == 'x' || gate_operation[0] == 'y') {
-    gate_expressions[gate] = gate_operation;
-    return gate_operation;
-  }
+struct gate {
+  string type;
+  string left_operand;
+  string right_operand;
+  string output;
+};
 
-  if (gate_expressions.find(gate) != gate_expressions.end()) {
-    return gate_expressions[gate];
-  }
-
-  regex pattern("(.*) (AND|OR|XOR) (.*)");
-  smatch matches;
-  regex_search(operations[gate], matches, pattern);
-  string left_operand = matches[1];
-  string operation = matches[2];
-  string right_operand = matches[3];
-
-  string left_operand_expression = get_gate_expression(left_operand, input_gates, gate_expressions, operations);
-  string right_operand_expression = get_gate_expression(right_operand, input_gates, gate_expressions, operations);
-
-  return "(" + left_operand_expression + ") " + operation + " (" + right_operand_expression + ")";
-}
+struct adder_step {
+  gate xor1 = {"XOR"};
+  gate xor2 = {"XOR"};
+  gate and1 = {"AND"};
+  gate and2 = {"AND"};
+  gate or1 = {"OR"};
+};
 
 int main () {
   ifstream myfile;
@@ -72,19 +60,158 @@ int main () {
       smatch matches;
       regex_search(line, matches, operation_pattern);
       string operation = matches[1];
-      string result = matches[2];
-      operations[result] = operation;
-      if (result[0] == 'z') z_gates += 1;
+      string output = matches[2];
+      operations[output] = operation;
+      if (output[0] == 'z') z_gates += 1;
     } 
   }
 
-  map<string, string> gate_expressions;
-  for (int i = 0; i < z_gates; i += 1) {
-    string gate = i < 10 ? "z0" + to_string(i) : "z" + to_string(i);
-    string result = get_gate_expression(gate, input_gates, gate_expressions, operations);
-    gate_expressions[gate] = result;
+  regex operand_pattern("(.*) (AND|OR|XOR) (.*)");
+  vector<adder_step> adder_steps(z_gates - 1);
+  for (pair<string, string> operation : operations) {
+    string output = operation.first;
+    string operands = operation.second;\
+    smatch matches;
+    regex_search(operands, matches, operand_pattern);
+    string left_operand = matches[1];
+    string operation_type = matches[2];
+    string right_operand = matches[3];
+    if (operands[0] == 'x' || operands[0] == 'y') {
+      int step_index = stoi(operands.substr(1, 2));
+
+      if (operation_type == "XOR") {
+        adder_steps[step_index].xor1.left_operand = left_operand;
+        adder_steps[step_index].xor1.right_operand = right_operand;
+        adder_steps[step_index].xor1.output = output;
+      } else if (operation_type == "AND") {
+        adder_steps[step_index].and1.left_operand = left_operand;
+        adder_steps[step_index].and1.right_operand = right_operand;
+        adder_steps[step_index].and1.output = output;
+      }
+    }
+    if (output[0] == 'z') {
+      int step_index = stoi(output.substr(1, 2));
+
+      if (operation_type == "XOR") {
+        adder_steps[step_index].xor2.left_operand = left_operand;
+        adder_steps[step_index].xor2.right_operand = right_operand;
+        adder_steps[step_index].xor2.output = output;
+      }
+    }
   }
 
-  cout << gate_expressions["z14"] << endl;
-  cout << gate_expressions["z16"] << endl;
+  for (pair<string, string> operation : operations) {
+    string output = operation.first;
+    string operands = operation.second;
+    if (operands[0] == 'x' || operands[0] == 'y') continue;
+
+    smatch matches;
+    regex_search(operands, matches, operand_pattern);
+    string left_operand = matches[1];
+    string operation_type = matches[2];
+    string right_operand = matches[3];
+    bool found = false;
+    if (operation_type == "OR") {
+      for (int i = 1; i < adder_steps.size(); i += 1) {
+        if (
+          adder_steps[i].and1.output == left_operand
+          || adder_steps[i].and1.output == right_operand
+          || adder_steps[i].and2.output == left_operand
+          || adder_steps[i].and2.output == right_operand
+        ) {
+          adder_steps[i].or1.left_operand = left_operand;
+          adder_steps[i].or1.right_operand = right_operand;
+          adder_steps[i].or1.output = output;
+          break;
+        }
+      }
+    } else if (operation_type == "AND") {
+      bool found = false;
+      for (int i = 1; i < adder_steps.size(); i += 1) {
+        if (
+          adder_steps[i].xor1.output == left_operand
+          || adder_steps[i].xor1.output == right_operand
+          || adder_steps[i - 1].or1.output == left_operand
+          || adder_steps[i - 1].or1.output == right_operand
+        ) {
+          adder_steps[i].and2.left_operand = left_operand;
+          adder_steps[i].and2.right_operand = right_operand;
+          adder_steps[i].and2.output = output;
+          break;
+        }
+      }
+    } else if (operation_type == "XOR") {
+      bool found = false;
+      for (int i = 1; i < adder_steps.size(); i += 1) {
+        if (adder_steps[i].xor1.output == left_operand || adder_steps[i].xor1.output == right_operand) {
+          adder_steps[i].xor2.left_operand = left_operand;
+          adder_steps[i].xor2.right_operand = right_operand;
+          adder_steps[i].xor2.output = output;
+          break;
+        }
+      }
+    }
+  }
+
+  for (pair<string, string> operation : operations) {
+    string output = operation.first;
+    string operands = operation.second;
+    smatch matches;
+    regex_search(operands, matches, operand_pattern);
+    string left_operand = matches[1];
+    string operation_type = matches[2];
+    string right_operand = matches[3];
+    if (operation_type == "OR") {
+      bool found = false;
+      for (int i = 0; i < adder_steps.size(); i += 1) {
+        if (
+          adder_steps[i].and1.output == left_operand
+          || adder_steps[i].and1.output == right_operand
+          || adder_steps[i].and2.output == left_operand
+          || adder_steps[i].and2.output == right_operand
+        ) {
+          adder_steps[i].or1.left_operand = left_operand;
+          adder_steps[i].or1.right_operand = right_operand;
+          adder_steps[i].or1.output = output;
+          break;
+        }
+      }
+    }
+  }
+
+  cout << endl;
+
+  for (int i = 2; i < adder_steps.size() - 1; i += 1) {
+    adder_step step = adder_steps[i];
+    adder_step previos_step = adder_steps[i - 1];
+
+    if (step.xor2.output[0] != 'z') {
+      // cout << "XOR2 output is not an output for step " << i << endl;
+      cout << step.xor2.output << endl;
+      if (step.xor1.output[0] == 'z') {
+        cout << step.xor1.output << endl;
+      } else if (step.and1.output[0] == 'z') {
+        cout << step.and1.output << endl;
+      } else if (step.and2.output[0] == 'z') {
+        cout << step.and2.output << endl;
+      } else if (step.or1.output[0] == 'z') {
+        cout << step.or1.output << endl;
+      }
+      continue;
+    }
+
+    if (step.xor2.left_operand != step.xor1.output && step.xor2.right_operand != step.xor1.output) {
+      // cout << "XOR1 output not XOR2 input for step " << i << endl;
+      cout << step.xor1.output << endl;
+    }
+
+    if (step.or1.left_operand != step.and1.output && step.or1.right_operand != step.and1.output) {
+      // cout << "AND1 output not OR input for step " << i << endl;
+      cout << step.and1.output << endl;
+    }
+    if (step.or1.left_operand != step.and2.output && step.or1.right_operand != step.and2.output) {
+      // cout << "AND2 output not OR input for step " << i << endl;
+      cout << step.and2.output << endl;
+    }
+  }
 }
