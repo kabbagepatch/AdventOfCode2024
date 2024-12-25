@@ -170,9 +170,11 @@ int main () {
           || adder_steps[i].and2.output == left_operand
           || adder_steps[i].and2.output == right_operand
         ) {
-          adder_steps[i].or1.left_operand = left_operand;
-          adder_steps[i].or1.right_operand = right_operand;
-          adder_steps[i].or1.output = output;
+          if (adder_steps[i].or1.left_operand.empty()) {
+            adder_steps[i].or1.left_operand = left_operand;
+            adder_steps[i].or1.right_operand = right_operand;
+            adder_steps[i].or1.output = output;
+          }
           break;
         }
       }
@@ -186,7 +188,7 @@ int main () {
     adder_step previos_step = adder_steps[i - 1];
 
     if (step.xor2.output[0] != 'z') {
-      // cout << "XOR2 output is not an output for step " << i << endl;
+      cout << "XOR2 output is not an output for step " << i << endl;
       cout << step.xor2.output << endl;
       if (step.xor1.output[0] == 'z') {
         cout << step.xor1.output << endl;
@@ -201,16 +203,16 @@ int main () {
     }
 
     if (step.xor2.left_operand != step.xor1.output && step.xor2.right_operand != step.xor1.output) {
-      // cout << "XOR1 output not XOR2 input for step " << i << endl;
+      cout << "XOR1 output not XOR2 input for step " << i << endl;
       cout << step.xor1.output << endl;
     }
 
     if (step.or1.left_operand != step.and1.output && step.or1.right_operand != step.and1.output) {
-      // cout << "AND1 output not OR input for step " << i << endl;
+      cout << "AND1 output not OR input for step " << i << endl;
       cout << step.and1.output << endl;
     }
     if (step.or1.left_operand != step.and2.output && step.or1.right_operand != step.and2.output) {
-      // cout << "AND2 output not OR input for step " << i << endl;
+      cout << "AND2 output not OR input for step " << i << endl;
       cout << step.and2.output << endl;
     }
   }
